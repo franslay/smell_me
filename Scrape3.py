@@ -5,7 +5,7 @@ import sys
 from urllib.request import Request, urlopen
 
 # Opening file
-perfumesfile = open("updated_fraglist.txt", 'r')
+perfumesfile = open("updated_fragList.txt", 'r')
 
 # Using for loop
 for line in perfumesfile:
@@ -22,10 +22,12 @@ for line in perfumesfile:
 
     #print(fragAccordList)
 
+    # Also check to see if accord txt file exists somewhere
+
     for accord in fragAccordList:
-        pos = accord+"positive.txt"
-        neg = accord+"negative.txt"
-        mid = accord+"neutral.txt"
+        pos = "data/"+accord+"positive.txt"
+        neg = "data/"+accord+"negative.txt"
+        mid = "data/"+accord+"neutral.txt"
         #accord_reviews = open(fname, 'w+')
 
         original_stdout = sys.stdout # Save a reference to the original standard output
