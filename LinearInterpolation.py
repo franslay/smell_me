@@ -13,18 +13,15 @@ class LinearInterpolation(LanguageModel):
         self.bigrammodel = SmoothedBigram()
         self.trigrammodel = SmoothedTrigram()
 
-        self.l1 = 0.1   # --> unigram
-        self.l2 = 0.6  # --> bigram k: 0.0088
-        self.l3 = 0.3  # --> trigram k: 0.0009
-        # self.l1 = 0.02   # --> unigram
-        # self.l2 = 0.69  # --> bigram k: 0.0088
-        # self.l3 = 0.29  # --> trigram k: 0.0009
+        # self.l1 = 0.1   # --> unigram
+        # self.l2 = 0.6  # --> bigram k: 0.0088
+        # self.l3 = 0.3  # --> trigram k: 0.0009
 
         # experimenting
-        """
+        
         self.l1 = 0.03
         self.l2 = 0.69
-        self.l3 = 0.28"""
+        self.l3 = 0.28
     
     def train(self, sentences):
         self.unigrammodel.train(sentences)

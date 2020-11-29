@@ -95,7 +95,7 @@ if __name__ == '__main__':
 
     # Generate sentences.
     if args.generate:
-        print('\nGenerating sentences (do these look good?):')
+        print('\nGenerating sentences:')
         for i in range(6):
             s = model.generate_sentence()
             if len(s) > 100:

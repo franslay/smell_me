@@ -9,8 +9,11 @@ perfumesfile = open("data/updated_fraglist.txt", 'r')
   
 # Using for loop 
 for line in perfumesfile: 
+    N = len(line)
     l = line.split(" ")
     url = l[0]
+    accordlist = l[1:N]
+
     req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
     webpage = urlopen(req).read()
     soup = BeautifulSoup(webpage, "html.parser")
@@ -24,7 +27,7 @@ for line in perfumesfile:
         # print("----------")
         for review in soup.findAll('div', attrs={'class':'reviewmain review3'}): # positive = review3
             comment = review.find('div', attrs={'class':'reviewblurb'}) # review comment 
-            print("positive", comment.text) # ".text" grabs just the text inside HTML tag
+            print("positive", comment.text, accordlist) # ".text" grabs just the text inside HTML tag
             # print("----------")
 
         print()
@@ -32,7 +35,7 @@ for line in perfumesfile:
         # print("----------")
         for review in soup.findAll('div', attrs={'class':'reviewmain review1'}): # negative = review1 
             comment = review.find('div', attrs={'class':'reviewblurb'}) # review comment
-            print("negative", comment.text) # ".text" grabs just the text inside HTML tag
+            print("negative", comment.text, accordlist) # ".text" grabs just the text inside HTML tag
             # print("----------")
 
         print()
@@ -40,7 +43,7 @@ for line in perfumesfile:
         # print("----------")
         for review in soup.findAll('div', attrs={'class':'reviewmain review2'}): # negative = review1 
             comment = review.find('div', attrs={'class':'reviewblurb'}) # review comment
-            print("neutral", comment.text) # ".text" grabs just the text inside HTML tag
+            print("neutral", comment.text, accordlist) # ".text" grabs just the text inside HTML tag
             # print("----------")
         
         sys.stdout = original_stdout # Reset the standard output to its original value
