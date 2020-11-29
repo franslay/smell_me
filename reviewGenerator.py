@@ -1,7 +1,5 @@
 # 
-# You shouldn't need to change anything in here.
-#
-# This runs Lab 2 and outputs the evaluation metrics. It assumes the following files will exist:
+# Assumes the following files will exist:
 #   BigramModel.py
 #   TrigramModel.py
 #   SmoothedBigram.py
@@ -10,12 +8,12 @@
 #
 # python3 SentenceGenerator.py -h 
 #
-# @author Nate Chambers
+# @author Krystal Kim, Franchette Allarey
+# Modified from NLP Lab 2 code
 #
 import math
 import argparse
 import sys
-# from jumble import Jumble
 from UnigramModel import UnigramModel
 
 
@@ -40,18 +38,44 @@ def verify_distribution(model):
         print('Testing context', c, end=' ...')
         modelsum = model.check_probability(c)
         if abs(1.0-modelsum) < 1e-6:
-            print('GOOD!')
+            print('GOOD! Probability distribution sums up to one')
         else:
             print('ERROR: probability distribution does not sum up to one, sum =', modelsum)
 
 
             
 if __name__ == '__main__':
+
+    # User input
+    userfrag = input("What is the name of your fragrance?: ")
+    # force feed into vocabulary to make it say something about the fragrance
+    useraccord = input("\nPick one accord.\n[Choices: amber, animalic, aromatic, citrus, floral, fruity, green, lavender, leather, musky, powdery, rose, spicy, sweet, vanilla, woody]:\n")
+    accordlist = ["amber", "animalic", "aromatic", "citrus", "floral", "fruity", "green", "lavender", "leather", "musky", "powdery", "rose", "spicy", "sweet", "vanilla", "woody"]
+    while not useraccord in accordlist:
+        print()
+        useraccord = input("Please pick a valid accord.\n[Choices: amber, animalic, aromatic, citrus, floral, fruity, green, lavender, leather, musky, powdery, rose, spicy, sweet, vanilla, woody]:\n")
+
+    usersentiment = input("\nDo you like your fragrance?\n[Choices: yes, no, idk]:\n")
+    while not (usersentiment == "yes" or usersentiment == "no" or usersentiment == "idk"):
+        print()
+        useraccord = input("Please pick a valid option.\n[Options: yes, no, idk]:\n")
+    
+    sentiment = ""
+    if usersentiment == "yes":
+        sentiment = "positive"
+    elif usersentiment == "no":
+        sentiment = "negative"
+    else:
+        sentiment = "neutral"
+
+    print()
     # Argument parser
+    accordfile = 'data/'+useraccord+sentiment+'.txt' 
+
     parser = argparse.ArgumentParser(description="reviewGenerator.py")
-    parser.add_argument('-model', action="store", dest="model", type=str, choices=['unigram','bigram','trigram','smoothbi','smoothtri','interp'], default='unigram', help='Type of LM to load')    
-    parser.add_argument('-train', action="store", dest="train", type=str, default='data/reviews.txt', help='Path to file with training sentences')
-    parser.add_argument('-test', action="store", dest="test", type=str, default='data/reviews.txt', help='Path to file with test sentences')
+    parser.add_argument('-model', action="store", dest="model", type=str, choices=['unigram','bigram','trigram','smoothbi','smoothtri','interp'], default='interp', help='Type of LM to load')    
+    parser.add_argument('-train', action="store", dest="train", type=str, default=accordfile, help='Path to file with training sentences')
+    # parser.add_argument('-test', action="store", dest="test", type=str, default='data/reviews.txt', help='Path to file with test sentences')
     parser.add_argument('-generate', type=eval, choices=[True,False], default=True, help='Generate sentences if True')        
 
     # Parse the command-line arguments.
@@ -61,8 +85,6 @@ if __name__ == '__main__':
     # Load the sentences
     if len(args.train) > 2:
         trainset = read_sentences(args.train)
-    if len(args.test) > 2:
-        testset = read_sentences(args.test)
 
     # Create the model
     if args.model == 'unigram':
@@ -95,7 +117,8 @@ if __name__ == '__main__':
 
     # Generate sentences.
     if args.generate:
-        print('\nGenerating sentences:')
+
+        print('\nGenerating sentences (do these look good?):')
         for i in range(6):
             s = model.generate_sentence()
             if len(s) > 100:

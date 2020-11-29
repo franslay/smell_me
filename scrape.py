@@ -5,7 +5,7 @@ import sys
 from urllib.request import Request, urlopen
 
 # Opening file 
-perfumesfile = open("data/updated_fraglist.txt", 'r')
+perfumesfile = open("updated_fragList.txt", 'r')
   
 # Using for loop 
 for line in perfumesfile: 
