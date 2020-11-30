@@ -15,37 +15,56 @@ import math
 import argparse
 import sys
 from UnigramModel import UnigramModel
+import os.path
 
+# Helper Function to clean up passages
+def preprocess_passage(passage):
+        # need to preprocess text...
+        passage = passage.lower() # might cause issues for names like Will
+        #get rid of chapter? might cause issues for some authors who don't use chapters (like Shakespeare)
+        #passage = passage.replace("chapter", " ") ###
+        #remove garbage punctuation
+        # passage = passage.replace('"', ' " ')
+        # passage = passage.replace(',', ' , ')
+        # passage = passage.replace(';', ' ; ')
+        # passage = passage.replace(':', ' : ')
+        # passage = passage.replace("'", " ' ")
+        # passage = passage.replace("-", ' - ')
+        # passage = passage.replace(" -  - ", ' -- ')
+        # passage = passage.replace("_", '')
+        # passage = passage.replace('\n', '')
+        # # passage = passage.replace('#', '')
+        # passage = passage.replace('“', '')
+        # passage = passage.replace('‘', '')
+        # passage = passage.replace('’', '')
+
+        # #handle punctuation
+        # # passage = passage.replace("[", " [ ")
+        # # passage = passage.replace("]", " ] ")
+        # # passage = passage.replace("(", " ( ")
+        # # passage = passage.replace(")", " ) ")
+        # # passage = passage.replace("/", " / ")
+        # passage = passage.replace(".", " . ")
+        # passage = passage.replace("?", " ? ") # treat ?,! as uniq tokens
+        # passage = passage.replace("!", " ! ") # ^ do that for logreg
+        # for i in range (0,4):
+        #     passage = passage.replace('  ', ' ')
+
+        return passage
 
 def read_sentences(path):
     print("Loading", path)
     sents = []
     for line in open(path):
-        tokens = line.strip().lower().split()
+        processedline = preprocess_passage(line)
+        tokens = processedline.strip().lower().split()
         sents.append(tokens)
     return sents
-
-
-def verify_distribution(model):
-    contexts = []
-    contexts.append( [ ] )
-    contexts.append( [ 'united' ] )    
-    contexts.append( [ 'to', 'the' ] )
-    contexts.append( [ 'the', 'quick', 'brown' ] )
-    contexts.append( [ 'lalok', 'nok', 'crrok' ] )        
-
-    for c in contexts:
-        print('Testing context', c, end=' ...')
-        modelsum = model.check_probability(c)
-        if abs(1.0-modelsum) < 1e-6:
-            print('GOOD! Probability distribution sums up to one')
-        else:
-            print('ERROR: probability distribution does not sum up to one, sum =', modelsum)
-
-
             
 if __name__ == '__main__':
-
+    if not os.path.isfile("data/amberpositive.txt"): # check if you have already downloaded training files
+        os.system('python3 Scrape3.py') #scrape reviews if no files
+        
     # User input
     userfrag = input("What is the name of your fragrance?: ")
     # force feed into vocabulary to make it say something about the fragrance
@@ -80,7 +99,7 @@ if __name__ == '__main__':
 
     # Parse the command-line arguments.
     args = parser.parse_args()
-    print(args)
+    # print(args)
     
     # Load the sentences
     if len(args.train) > 2:
@@ -110,20 +129,16 @@ if __name__ == '__main__':
     if model.get_vocabulary() == None:
         print('ERROR: get_vocabulary() didn''t return a dictionary')
         sys.exit()
-    
-    # Check for proper probability distributions.
-    # print('\nChecking for proper probability distributions:')
-    # verify_distribution(model)
 
     # Generate sentences.
-    if args.generate:
+    # if args.generate:
 
-        print('\nGenerating sentences (do these look good?):')
-        for i in range(6):
-            s = model.generate_sentence()
-            if len(s) > 100:
-                s = s[0:100]
-                s.append(' CUTTING OFF TOO LONG...')
-            for t in s:
-                print(t, end=' ')
-            print()
+    print('\nREVIEW:')
+    for i in range(7):
+        s = model.generate_sentence()
+        if len(s) > 100:
+            s = s[0:100]
+            s.append(' CUTTING OFF TOO LONG...')
+        for t in s:
+            print(t, end=' ')
+        print()

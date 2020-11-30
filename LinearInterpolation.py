@@ -19,9 +19,12 @@ class LinearInterpolation(LanguageModel):
 
         # experimenting
         
-        self.l1 = 0.03
-        self.l2 = 0.69
-        self.l3 = 0.28
+        # self.l1 = 0.06
+        # self.l2 = 0.62
+        # self.l3 = 0.32
+        self.l1 = 0.9
+        self.l2 = 0.6
+        self.l3 = 0.31
     
     def train(self, sentences):
         self.unigrammodel.train(sentences)
