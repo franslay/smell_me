@@ -28,22 +28,22 @@ def preprocess_passage(passage):
         # passage = passage.replace(',', ' , ')
         # passage = passage.replace(';', ' ; ')
         # passage = passage.replace(':', ' : ')
-        # passage = passage.replace("'", " ' ")
-        # passage = passage.replace("-", ' - ')
-        # passage = passage.replace(" -  - ", ' -- ')
-        # passage = passage.replace("_", '')
-        # passage = passage.replace('\n', '')
-        # # passage = passage.replace('#', '')
-        # passage = passage.replace('“', '')
-        # passage = passage.replace('‘', '')
-        # passage = passage.replace('’', '')
+        passage = passage.replace("'", " ' ")
+        passage = passage.replace("-", ' - ')
+        passage = passage.replace(" -  - ", ' -- ')
+        passage = passage.replace("_", '')
+        passage = passage.replace('\n', '')
+        # passage = passage.replace('#', '')
+        passage = passage.replace('“', '')
+        passage = passage.replace('‘', '')
+        passage = passage.replace('’', '')
 
-        # #handle punctuation
-        # # passage = passage.replace("[", " [ ")
-        # # passage = passage.replace("]", " ] ")
-        # # passage = passage.replace("(", " ( ")
-        # # passage = passage.replace(")", " ) ")
-        # # passage = passage.replace("/", " / ")
+        #handle punctuation
+        # passage = passage.replace("[", " [ ")
+        # passage = passage.replace("]", " ] ")
+        # passage = passage.replace("(", " ( ")
+        # passage = passage.replace(")", " ) ")
+        # passage = passage.replace("/", " / ")
         # passage = passage.replace(".", " . ")
         # passage = passage.replace("?", " ? ") # treat ?,! as uniq tokens
         # passage = passage.replace("!", " ! ") # ^ do that for logreg
@@ -53,7 +53,7 @@ def preprocess_passage(passage):
         return passage
 
 def read_sentences(path):
-    print("Loading", path)
+    # print("Loading", path)
     sents = []
     for line in open(path):
         processedline = preprocess_passage(line)
@@ -77,7 +77,7 @@ if __name__ == '__main__':
     usersentiment = input("\nDo you like your fragrance?\n[Choices: yes, no, idk]:\n")
     while not (usersentiment == "yes" or usersentiment == "no" or usersentiment == "idk"):
         print()
-        useraccord = input("Please pick a valid option.\n[Options: yes, no, idk]:\n")
+        usersentiment = input("Please pick a valid option.\n[Options: yes, no, idk]:\n")
     
     sentiment = ""
     if usersentiment == "yes":
@@ -134,7 +134,7 @@ if __name__ == '__main__':
     # if args.generate:
 
     print('\nREVIEW:')
-    for i in range(7):
+    for i in range(5):
         s = model.generate_sentence()
         if len(s) > 100:
             s = s[0:100]
